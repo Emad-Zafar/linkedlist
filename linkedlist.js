@@ -23,7 +23,7 @@ class List {
     append (value){
 
         //create node
-        const node = list.create(value);
+        const node = this.create(value);
 
         //check if list is empty add at at first
         if (!this.head){
@@ -50,10 +50,11 @@ class List {
     appendAt (value, index) {
 
         //create node
-        const node = list.create(value);
+        const node = this.create(value);
 
         if (index > this.size) {
-            return console.log(`\n "${value}" at "${index}" index can not be added \n==> Index does not exist...\n`);
+            console.log(`\n "${value}" at "${index}" index can not be added \n==> Index does not exist...\n`);
+            return;
 
         }
         //check if list is empty add at at first
@@ -119,15 +120,57 @@ class List {
 
 
     deleteAt (index){
-        if (this.size == 0){
+
+        let current = this.head;
+        let previous;
+        let count = 0;
+
+        // if list is empty
+        if (this.size <= 0){
             return console.log (`List is empty...`)
         }
+
+        // if list has only one element
         else if (index == 0 && this.size == 1){
             this.head = null;
             this.size--;
             return console.log (`Now the list is empty`);
         }
+
+        // if deleted index is first
+        else if (index == 0 && this.size != 1) {
+            current = this.head;
+            this.head = current.next;
+            this.size--;
+            return console.log(`new value at index ${index} is ${this.head.value}`)
+        }
+        
         else {
+            // if index is bigger than list size
+            if (index > this.size) {
+                return console.log(`provided index too large....`);
+                
+            }
+
+            // if deleted index is in between
+            current = this.head;
+            previous = null;
+            count = 0;
+            while (this.size > 0 && count != index){
+                previous = current;
+                current = current.next;
+                count++;
+            }
+            if (count == index){
+                previous.next = current.next;
+                this.size--;
+                return console.log(`value "${current.value}" at index ${index} deleted.`)
+                
+            }
+            else{
+                return console.log(`value not found....`);
+            }
+
             
         }
     }
@@ -150,6 +193,8 @@ list.append(2);
 list.append(1);
 list.appendAt(100,2);
 list.delete(200);
+console.dir(list,{depth:null})
+list.deleteAt(4);
 console.dir(list,{depth:null})
 
 
